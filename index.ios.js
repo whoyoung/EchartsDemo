@@ -14,19 +14,20 @@ import {
 } from 'react-native';
 import Echarts from 'native-echarts';
 
-let dataML = [ [5,5,5,5,5,5] ];
-let dataJC = [ [5,5,2,2,4,4] ];
-let lineStyle = {
+const chartsTitle = '马龙 VS 吉村真晴 战力图';
+const dataML = [ [5,5,5,5,5,5] ];
+const dataJC = [ [5,5,2,2,4,4] ];
+const lineStyle = {
     normal: {
         width: 1,
         opacity: 0.5
     }
 };
-
+const xData = ['发球', '速度', '经验', '防守', '力量', '技术'];
 const radarOption = {
     backgroundColor: 'rgba(178,123,122,0.3)',
     title: {
-        text: '马龙 VS 吉村真晴 战力图',
+        text: chartsTitle,
         left: 'center',
         textStyle: {
             color: '#000',
@@ -137,7 +138,7 @@ const barOption = {
     xAxis : [
         {
             type : 'category',
-            data : ['发球', '速度', '经验', '防守', '力量', '技术'],
+            data : xData,
             axisTick: {
                 alignWithLabel: true
             },
@@ -183,12 +184,104 @@ const barOption = {
     ]
 };
 
+const lineOption = {
+    title: {
+        text: chartsTitle,
+        left: 'center'
+    },
+    tooltip: {
+        trigger: 'axis'
+    },
+    xAxis: {
+        data: xData
+    },
+    yAxis: {
+        splitLine: {
+            show: false
+        }
+    },
+    toolbox: {
+        left: 'right',
+        feature: {
+            dataZoom: {
+                yAxisIndex: 'none'
+            },
+            restore: {},
+            saveAsImage: {}
+        }
+    },
+    dataZoom: [{
+        startValue: '发球'
+    }, {
+        type: 'inside'
+    }],
+    visualMap: {
+        top: 30,
+        left: 'center',
+        orient: 'horizontal',
+        pieces: [{
+            gt: 0,
+            lte: 1,
+            color: '#096'
+        }, {
+            gt: 1,
+            lte: 2,
+            color: '#ffde33'
+        }, {
+            gt: 2,
+            lte: 3,
+            color: '#ff9933'
+        }, {
+            gt: 3,
+            lte: 4,
+            color: '#cc0033'
+        }, {
+            gt: 4,
+            lte: 5,
+            color: '#660099'
+        }],
+        outOfRange: {
+            color: '#999'
+        }
+    },
+    series : [
+        {
+          name:'马龙',
+          type:'line',
+          data:[5,5,5,5,5,5],
+          itemStyle: {
+            normal: {
+              color: 'red'
+            }
+          },
+          markLine: {
+            silent: true,
+            data: [{
+                yAxis: 1
+            }, {
+                yAxis: 2
+            }, {
+                yAxis: 3
+            }, {
+                yAxis: 4
+            }]
+          }
+        },
+        {
+          name:'吉村真晴',
+          type:'line',
+          data:[5,5,2,2,4,4]
+        }
+    ]
+};
+
 export default class EchartsDemo extends Component {  
   render() {
     return (
       <ScrollView contentContainerStyle={{top:20,paddingBottom:20}}>
           <Echarts option={radarOption} height={300} />
           <Echarts option={barOption} height={300} />
+          <Echarts option={lineOption} height={300} />
       </ScrollView>
       
     );
